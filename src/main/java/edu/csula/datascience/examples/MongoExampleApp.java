@@ -21,12 +21,12 @@ import static com.mongodb.client.model.Sorts.descending;
 public class MongoExampleApp {
     public static void main (String[] args) {
         // establish database connection to MongoDB
-        MongoClient mongoClient = new MongoClient("db");
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
         // select `bd-example` as testing database
-        MongoDatabase database = mongoClient.getDatabase("bd-example");
+        MongoDatabase database = mongoClient.getDatabase("weatherdata");
 
         // select collection by name `test`
-        MongoCollection<Document> collection = database.getCollection("test");
+        MongoCollection<Document> collection = database.getCollection("dummyColl");
 
         // to create new document
         Document doc = new Document("name", "MongoDB")
