@@ -1,6 +1,8 @@
-package edu.csula.datascience.acquisition;
+package edu.csula.datascience.acquisitionImpl;
 
 import com.google.common.collect.Lists;
+
+import edu.csula.datascience.acquisition.Source;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -8,7 +10,7 @@ import java.util.function.Consumer;
 /**
  * A mock source to provide data
  */
-public class MockSource implements Source<M> {
+public class MockSource implements Source<MockData> {
     int index = 0;
 
     @Override
@@ -17,11 +19,11 @@ public class MockSource implements Source<M> {
     }
 
     @Override
-    public Collection<M> next() {
+    public Collection<MockData> next() {
         return Lists.newArrayList(
-            new M("1", null),
-            new M("2", "content2"),
-            new M("3", "content3")
+            new MockData("1", null),
+            new MockData("2", "content2"),
+            new MockData("3", "content3")
         );
     }
 }

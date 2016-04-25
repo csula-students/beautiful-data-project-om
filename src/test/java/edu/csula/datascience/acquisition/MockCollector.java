@@ -1,23 +1,26 @@
 package edu.csula.datascience.acquisition;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * A mock implementation of collector for testing
  */
-public class MockCollector implements Collector<SimpleModel, MockData> {
+public class MockCollector implements Collector<S, M> {
     @Override
-    public Collection<SimpleModel> download(Source<MockData> src) {
-        return src.provide()
+    public Collection<S> mungee(Collection<M> src) {
+        // in your example, you might need to check src.hasNext() first
+        return src
             .stream()
-            .map(SimpleModel::build)
+            .filter(data -> data.getContent() != null)
+            .map(S::build)
             .collect(Collectors.toList());
     }
 
     @Override
-    public boolean save(Collection<SimpleModel> data) {
-        // TODO: maybe replace with file write and test file
-        return true;
+    public void save(Collection<S> data) {
     }
+
+	
 }
