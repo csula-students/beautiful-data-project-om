@@ -36,17 +36,17 @@ public class ReadJsonTest {
 
 		int year = 2001;
 
-		/*for (int i = year; i <= 2015; i++) {
+		for (int i = year; i <= 2015; i++) {
 			String jsonString = callURL(
 					"https://data.cityofchicago.org/resource/6zsd-86xi.json?$limit=100000&year="
 							+ i, i);
 
 			System.out.println("============== success for =========== " + i
 					+ "============================");
-		}*/
-		 String jsonString =
+		}
+		/* String jsonString =
 		 callURL("https://data.cityofchicago.org/resource/6zsd-86xi.json?$limit=10&year=2015",101);
-		 
+		 */
 		ReadJsonTest r =new ReadJsonTest();
 		//r.getData();
 		
