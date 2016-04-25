@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import edu.csula.datascience.acquisition.Crime;
-import edu.csula.datascience.acquisition.MockData;
-import edu.csula.datascience.acquisition.SimpleModel;
+import edu.csula.datascience.acquisition.M;
+import edu.csula.datascience.acquisition.S;
 
 public class DataCollectorImpl /*implements Collector<SimpleModel, MockData>*/ {
 
@@ -40,7 +40,7 @@ public class DataCollectorImpl /*implements Collector<SimpleModel, MockData>*/ {
 	}
 
 	//@Override
-	public void save(Collection<SimpleModel> data) {
+	public void save(Collection<S> data) {
 		// TODO Auto-generated method stub
 
 		int year = 2001;
@@ -67,7 +67,7 @@ public class DataCollectorImpl /*implements Collector<SimpleModel, MockData>*/ {
 	}
 
 	//@Override
-	public Collection<SimpleModel> mungee(Collection<MockData> src) {
+	public Collection<S> mungee(Collection<M> src) {
 		// TODO Auto-generated method stub
 		return null;
 	}

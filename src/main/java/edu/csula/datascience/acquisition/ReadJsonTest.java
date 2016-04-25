@@ -9,13 +9,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import com.mongodb.BulkWriteOperation;
 import com.mongodb.DB;
@@ -25,7 +20,6 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
-import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.util.JSON;
 
 public class ReadJsonTest {

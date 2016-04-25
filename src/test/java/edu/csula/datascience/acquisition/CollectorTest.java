@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
  * A test case to show how to use Collector and Source
  */
 public class CollectorTest {
-    private Collector<SimpleModel, MockData> collector;
-    private Source<MockData> source;
+    private Collector<S, M> collector;
+    private Source<M> source;
 
     @Before
     public void setup() {
@@ -25,10 +25,10 @@ public class CollectorTest {
 
     @Test
     public void mungee() throws Exception {
-        List<SimpleModel> list = (List<SimpleModel>) collector.mungee(source.next());
-        List<SimpleModel> expectedList = Lists.newArrayList(
-            new SimpleModel("2", "content2"),
-            new SimpleModel("3", "content3")
+        List<S> list = (List<S>) collector.mungee(source.next());
+        List<S> expectedList = Lists.newArrayList(
+            new S("2", "content2"),
+            new S("3", "content3")
         );
 
         Assert.assertEquals(list.size(), 2);

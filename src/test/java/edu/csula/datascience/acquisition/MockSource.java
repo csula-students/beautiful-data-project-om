@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 /**
  * A mock source to provide data
  */
-public class MockSource implements Source<MockData> {
+public class MockSource implements Source<M> {
     int index = 0;
 
     @Override
@@ -17,11 +17,11 @@ public class MockSource implements Source<MockData> {
     }
 
     @Override
-    public Collection<MockData> next() {
+    public Collection<M> next() {
         return Lists.newArrayList(
-            new MockData("1", null),
-            new MockData("2", "content2"),
-            new MockData("3", "content3")
+            new M("1", null),
+            new M("2", "content2"),
+            new M("3", "content3")
         );
     }
 }
