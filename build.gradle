@@ -3,6 +3,7 @@ plugins {
   id "net.saliman.cobertura" version "2.3.1"
   id "com.github.kt3k.coveralls" version "2.6.3"
   id 'com.github.johnrengelman.shadow' version '1.2.3'
+  
 }
 
 group 'csula'
@@ -33,6 +34,10 @@ dependencies {
   compile 'com.mashape.unirest:unirest-java:1.4.9'
   compile 'org.mongodb:mongodb-driver:3.2.2'
   compile 'org.twitter4j:twitter4j-core:4.0.4'
+  compile 'org.codehaus.jackson:jackson-mapper-asl:1.5.0'
+  compile 'com.google.code.gson:gson:1.7.2'
+  
+  
 
   testCompile group: 'junit', name: 'junit', version: '4.11'
 }

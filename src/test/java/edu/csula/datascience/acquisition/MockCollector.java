@@ -1,6 +1,7 @@
 package edu.csula.datascience.acquisition;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -20,4 +21,6 @@ public class MockCollector implements Collector<SimpleModel, MockData> {
     @Override
     public void save(Collection<SimpleModel> data) {
     }
+
+	
 }

@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
@@ -32,6 +34,9 @@ import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.util.JSON;
 
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import edu.csula.datascience.acquisition.CrimeModel;
 
@@ -53,14 +58,24 @@ public class ReadJsonTest {
 			System.out.println("============== success for =========== " + i
 					+ "============================");
 		}*/
-		/* String jsonString =
-		 callURL("https://data.cityofchicago.org/resource/6zsd-86xi.json?$limit=75000&year=2015",101);
-*/
-		// https://data.cityofnewyork.us/api/views/nc67-uf89/rows.json?accessType=DOWNLOAD
-		// System.out.println(jsonString);
+		 String jsonString =
+		 callURL("https://data.cityofchicago.org/resource/6zsd-86xi.json?$limit=10&year=2015",101);
+		 
+		ReadJsonTest r =new ReadJsonTest();
+		//r.getData();
 		
-		 ReadJsonTest r =new ReadJsonTest();
-		 r.getData();
+		
+		
+		List<CrimeModel> crimeModelsList=new ArrayList<CrimeModel>();
+		crimeModelsList=r.getDataFromAPI("https://data.cityofchicago.org/resource/6zsd-86xi.json?$limit=10&year=2015");
+		
+		r.StoreData(crimeModelsList);
+		
+		
+		// https://data.cityofnewyork.us/api/views/nc67-uf89/rows.json?accessType=DOWNLOAD
+		 //System.out.println(jsonString);
+		
+		
 		 
 		 System.out.println("done");
 		 
@@ -70,7 +85,7 @@ public class ReadJsonTest {
 	
 	
 	
-    public void getData(){
+    public void getData() throws JsonParseException, JsonMappingException, IOException{
     	
     	List<CrimeModel> crime = new ArrayList<CrimeModel>();
 
@@ -84,44 +99,88 @@ public class ReadJsonTest {
 		DBCursor cursor = collection.find(query); 
 		System.out.println(cursor.count());
 		
+		//Ls
+		
+		List<CrimeModel> crimeModelList=new ArrayList<CrimeModel>();
+		
 		while (cursor.hasNext()) {
 		    DBObject theObj = cursor.next();
 		    
 		    System.out.println(theObj.toString());
 		    
+		    ObjectMapper mapper = new ObjectMapper();
+
+		    CrimeModel obj = mapper.readValue(theObj.toString(), CrimeModel.class);
 		    
-		    //How to get the DBObject value to ArrayList of Java Object?
-
-		    String name = (String) theObj.get("arrest");
-		    System.out.println(name);
-		    BasicDBList studentsList =  (BasicDBList) theObj.get("_id");
- 		    System.out.println(studentsList.size());
-    	    for (int i = 0; i < cursor.size(); i++) {
-    	    	BasicDBObject studentObj = (BasicDBObject) studentsList.get(i);
-    	    	String case_number = studentObj.getString("case_number");
-    	        String district = studentObj.getString("district");
-    	        String date = studentObj.getString("date");
-    	        String description = studentObj.getString("desscription");
-
-    	        CrimeModel c = new CrimeModel();
-    	        c.setCase_number(case_number);
-    	        c.setDistrict(district);
-    	        c.setDate(date);
-    	        c.setDescription(description);
-
-    	        crime.add(c);
-    	        
-    	        for (CrimeModel cm : crime){
-    	        	System.out.println(cm.getDescription());
-    	        }
-    	    }               
+		    crimeModelList.add(obj);
+		    
+		    System.out.println(obj.toString());
+		    
+		}
+		System.out.println("crimeModelList size ----->"+crimeModelList.size());
     	}
     
+    
+    
+    
+    public List<CrimeModel> getDataFromAPI(String myURL){
+    	System.out.println("Requested URL:" + myURL);
+		StringBuilder sb = new StringBuilder();
+		URLConnection urlConn = null;
+		InputStreamReader in = null;
+		List <CrimeModel> crimeModelList = new ArrayList<CrimeModel>();
+
+		try {
+
+			URL url = new URL(myURL);
+			urlConn = url.openConnection();
+			if (urlConn != null)
+				urlConn.setReadTimeout(60 * 1000);
+			if (urlConn != null && urlConn.getInputStream() != null) {
+				in = new InputStreamReader(urlConn.getInputStream(),
+						Charset.defaultCharset());
+				BufferedReader bufferedReader = new BufferedReader(in);
+				if (bufferedReader != null) {
+					int cp;
+					while ((cp = bufferedReader.read()) != -1) {
+						sb.append((char) cp);
+
+					}
+					bufferedReader.close();
+				}
+			}
+			
+			
+			ObjectMapper mapper = new ObjectMapper();
+			
+			List<DBObject> b= new ArrayList<DBObject>();
+
+			b = (List<DBObject>) JSON.parse(sb.toString());
+			
+		    
+		    for (DBObject doc : b) {
+		    	
+		    	CrimeModel obj = mapper.readValue(doc.toString(), CrimeModel.class);
+			    
+			    crimeModelList.add(obj);
+			}
+		    
+		    System.out.println(crimeModelList.size());
+		    
+		}
+		    catch (Exception e) {
+
+				System.out.println("2");
+				throw new RuntimeException("Exception while calling URL:" + myURL,
+						e);
+			}
+		    return crimeModelList;
+		    
+		
+
     }
-	
-	
-	
-	
+    
+    
 
 	@SuppressWarnings("unchecked")
 	public static String callURL(String myURL, int year) {
@@ -148,7 +207,9 @@ public class ReadJsonTest {
 					bufferedReader.close();
 				}
 			}
-
+			
+			List <CrimeModel> crimeModelList = new ArrayList<CrimeModel>();
+			
 			System.out.println("b4 dtabase");
 
 			Mongo mongo = new Mongo("localhost", 27017);
@@ -159,30 +220,25 @@ public class ReadJsonTest {
 			List<DBObject> a = new ArrayList<DBObject>();
 
 			a = (List<DBObject>) JSON.parse(sb.toString());
+			
+			System.out.println("===============================================================================");
+			System.out.println(sb.toString());
 
+			
+
+			System.out.println("===============================================================================");
+			
+			
+			System.out.println(a.toString());
 			BulkWriteOperation builder = collection
 					.initializeUnorderedBulkOperation();
 			for (DBObject doc : a) {
-				builder.insert(doc);
+				
+				
+				//builder.insert(doc);
 			}
-			com.mongodb.BulkWriteResult result = builder.execute();
-
-			/*
-			 * DBObject dbObject = (DBObject) JSON .parse(sb.toString());
-			 */
-
-			/*
-			 * for (int i=0; i < dbObject.toString().length(); i++) {
-			 * collection.insert(dbObject(i)); }
-			 */
 
 			System.out.println("data inserted");
-
-			// for printing fetched records
-			DBCursor cursorDoc = collection.find();
-			while (cursorDoc.hasNext()) {
-				System.out.println(cursorDoc.next());
-			}
 
 			System.out.println("Done");
 			in.close();
@@ -196,70 +252,45 @@ public class ReadJsonTest {
 
 		return sb.toString();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void StoreData(List<CrimeModel> crimeModelList){
+		
+	
+		Mongo mongo = new Mongo("localhost", 27017);
+		DB db = mongo.getDB("Crimedata");
 
-/*	public static String readFile(String filename) {
-		String result = "";
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(filename));
-			StringBuilder sb = new StringBuilder();
-			String line = br.readLine();
-			while (line != null) {
-				sb.append(line);
-				line = br.readLine();
+		DBCollection collection = db.getCollection("100000");
 
-				DBObject dbo = (DBObject) com.mongodb.util.JSON
-						.parse('{' + line + '}');
-				List<DBObject> list = new ArrayList<>();
-				list.add(dbo);
-				new MongoClient().getDB("CrimeData").getCollection("rec")
-						.insert(list);
-			}
-			result = sb.toString();
+		List<DBObject> a = new ArrayList<DBObject>();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		BulkWriteOperation builder = collection
+				.initializeUnorderedBulkOperation();
+		
+		   Gson gson = new Gson();
+		    
+		   StringBuilder sb = new StringBuilder();
+		    
+		    String json = new Gson().toJson(crimeModelList);
+		    
+		    System.out.println("==============YOYOYO====================================");
+		    System.out.println(json);
+		    //sb.toString();
+		    System.out.println("==================================================");
+		    
+		    a =  (List<DBObject>) JSON.parse(json);
 
-		return result;
-
+		
+		    for (DBObject doc : a) {
+			
+		    	builder.insert(doc);
+		    }
+		    
+		    com.mongodb.BulkWriteResult result = builder.execute();
+		
 	}
+	
+	
 
-	public static void importJSONFileToDBUsingJavaDriver(String pathToFile,
-			DB db, String collectionName) {
-		// open file
-		FileInputStream fstream = null;
-		try {
-			fstream = new FileInputStream(pathToFile);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("file not exist, exiting");
-			return;
-		}
-		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-
-		// read it line by line
-		String strLine;
-		DBCollection newColl = db.getCollection(collectionName);
-		try {
-			while ((strLine = br.readLine()) != null) {
-				// convert line by line to BSON
-				DBObject bson = (DBObject) JSON.parse(strLine);
-				// insert BSONs to database
-				try {
-
-					newColl.insert(bson);
-				} catch (MongoException e) {
-					// duplicate key
-					e.printStackTrace();
-				}
-
-			}
-			br.close();
-		} catch (IOException e) {
-			e.printStackTrace(); // To change body of catch statement use File |
-									// Settings | File Templates.
-		}
-
-	}*/
 
 }

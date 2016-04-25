@@ -1,6 +1,7 @@
 package edu.csula.datascience.acquisition;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Interface to define collector behavior
@@ -17,4 +18,8 @@ public interface Collector<T, R> {
     Collection<T> mungee(Collection<R> src);
 
     void save(Collection<T> data);
+
+	//List<CrimeModel> mungee(List<CrimeModel> crimeModels);
+
+	//List<Crime> mungee();
 }

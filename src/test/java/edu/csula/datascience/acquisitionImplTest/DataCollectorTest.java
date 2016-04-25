@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.BSONObject;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -49,29 +51,34 @@ public class DataCollectorTest {
     	DBCursor cursor = (DBCursor) collection.findOne();  
     	while(cursor.hasNext()) {  
     	    System.out.println(cursor.next());  
-    	
+    	    
+    	    DBObject theObj = cursor.next();
+    	    CrimeModel emp = (new Gson()).fromJson(theObj.toString(), CrimeModel.class);
+            
+    	    
+    	    System.out.println(emp.toString());
     	    //How to get the DBObject value to ArrayList of Java Object?
-
-    	    BasicDBList studentsList = (BasicDBList) ((BSONObject) collection).get("Crimedata");
-    	    for (int i = 0; i < studentsList.size(); i++) {
-    	        BasicDBObject studentObj = (BasicDBObject) studentsList.get(i);
-    	        String case_number = studentObj.getString("case_number");
-    	        String district = studentObj.getString("district");
-    	        String date = studentObj.getString("date");
-    	        String description = studentObj.getString("desscription");
-
-    	        CrimeModel c = new CrimeModel();
-    	        c.setCase_number(case_number);
-    	        c.setDistrict(district);
-    	        c.setDate(date);
-    	        c.setDescription(description);
-
-    	        crime.add(c);
-    	        
-    	        for (CrimeModel cm : crime){
-    	        	System.out.println(crime);
-    	        }
-    	    }               
+//
+//    	    BasicDBList studentsList = (BasicDBList) ((BSONObject) collection).get("Crimedata");
+//    	    for (int i = 0; i < studentsList.size(); i++) {
+//    	        BasicDBObject studentObj = (BasicDBObject) studentsList.get(i);
+//    	        String case_number = studentObj.getString("case_number");
+//    	        String district = studentObj.getString("district");
+//    	        String date = studentObj.getString("date");
+//    	        String description = studentObj.getString("desscription");
+//
+//    	        CrimeModel c = new CrimeModel();
+//    	        c.setCase_number(case_number);
+//    	        c.setDistrict(district);
+//    	        c.setDate(date);
+//    	        c.setDescription(description);
+//
+//    	        crime.add(c);
+//    	        
+//    	        for (CrimeModel cm : crime){
+//    	        	System.out.println(crime);
+//    	        }
+//    	    }               
     	}
     }
 

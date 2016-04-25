@@ -45,4 +45,5 @@ public class TwitterCollector implements Collector<Status, Status> {
 
         collection.insertMany(documents);
     }
+	
 }
