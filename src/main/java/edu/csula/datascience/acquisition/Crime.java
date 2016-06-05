@@ -172,8 +172,7 @@ public class Crime {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
-    
-    
+	
     
     
     

@@ -28,11 +28,14 @@ public class ReadJsonTest {
 	
 		//String jsonString = callURL("https://data.cityofchicago.org/resource/6zsd-86xi.json");
 	    
-		int year=2001;
+		int year=2012;
 		
-		for (int i=year;i<=2015;i++ ){
-		String jsonString = callURL("https://data.cityofchicago.org/resource/6zsd-86xi.json?$limit=100000&year="+i,i);
+		for (int i=year;i<=2014;i++ ){
+		//String jsonString = callURL("https://data.cityofchicago.org/resource/6zsd-86xi.json?$limit=100000&year="+i,i);
 	
+		String jsonString = callURL("https://data.cityofboston.gov/resource/ufcx-3fdn.json?$limit=100000&year="+i,i);
+		
+		//https://data.cityofboston.gov/resource/ufcx-3fdn.json?year=2014
 
 		System.out.println("============== success for =========== " + i + "============================");
 		}
@@ -76,7 +79,7 @@ public static String callURL(String myURL,int year) {
 		Mongo mongo = new Mongo("localhost", 27017);
 		DB db = mongo.getDB("Crimedata");
 		
-		DBCollection collection = db.getCollection(Integer.toString(year));
+		DBCollection collection = db.getCollection(Integer.toString(year)+"_boston");
 
 		List<DBObject> a = new ArrayList<DBObject>();
 		

@@ -1,0 +1,21 @@
+Team members :
+1)PRATIK SHAH
+2)ASHISH PANDYA
+
+Youtube URL:  https://www.youtube.com/watch?v=MmEplIMq1MA
+
+
+
+Q. Suggest hypotheses about the causes of observed phenomena?
+A. Based on the data and evidences we have analyzed the crime types occurring at different locations, categorize it with its ward details so that we can put more focus on impacted areas and provide statistics which can portray the possibilities of occurring crimes.
+ 
+ 
+Q. Assess assumptions on which statistical inference will be based?
+A. We can assume from the arrest ratio that which type of crimes are being caught by police and in which they are lagging.
+ 
+Q. Support the selection of appropriate statistical tools and techniques?
+A. We have justified our approach and analyses using Pie and Vertical Bar charts in Kibana and have extracted data from Elastic Search.
+ 
+Q. Provide a basis for further data collection through surveys or experiments?
+A. We can collect the data through survey from Victims and other ward resident to analyze type and cause of crime, then take appropriate measures to prevent them.
+ 
